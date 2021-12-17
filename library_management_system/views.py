@@ -31,6 +31,7 @@ def requires_admin(f):
 
 @login_manager.user_loader
 def load_user(user_id: int):
+    """ Loads the user with help on id """
     return User.query.get(user_id)
 
 
@@ -45,10 +46,13 @@ def index():
 
 
 class LoginView(MethodView):
+    """ Login view for Student users only """
     def get(self):
+        """ Initital view on screen """
         return render_template("login.html", year=datetime.now().year)
 
     def post(self):
+        """ checks user's credentials and navigates to next view """
         email = request.form.get("email")
         password = request.form.get("password")
         user = User.query.filter_by(email=email).first()
@@ -108,7 +112,7 @@ class AdminView(MethodView):
 @main.route("/dashboard", methods=["GET"])
 @login_required
 def dashboard():
-    """ This view will help see the lpogged in user's book return and issue"""
+    """ This view will help see the logged in user's book return and issue"""
     copies = db.session.query(Book.id, Book.name, Book.author, Copy.date_issued, Copy.date_return).join(Book).filter(Copy.book == Book.id).filter(Copy.issued_by == current_user.id).all()
 
     if copies:
@@ -133,6 +137,7 @@ def admin_dashboard():
 
 
 class ShowStudentView(MethodView):
+    """ List of students will be shown here """
     def get(self):
         students = User.query.filter_by(admin = False).all()
         print(students)
@@ -278,9 +283,10 @@ main.add_url_rule("/login", view_func=LoginView.as_view("login"))
 main.add_url_rule("/admin", view_func=AdminView.as_view("admin"))
 
 main.add_url_rule(
-    "/show/students",
-    view_func=login_required(requires_admin(ShowStudentView.as_view("show_students"))),
+   "/show/students",
+   view_func=login_required(requires_admin(ShowStudentView.as_view("show_students"))),
 )
+
 main.add_url_rule(
     "/add/book",
     view_func=login_required(requires_admin(AddBookView.as_view("add_book"))),
