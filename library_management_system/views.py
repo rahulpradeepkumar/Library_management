@@ -67,9 +67,11 @@ class LoginView(MethodView):
 
 class RegisterView(MethodView):
     def get(self):
+        """ lading page view """
         return render_template("register.html", year=datetime.now().year)
 
     def post(self):
+        """ Add new user view """
         name = request.form.get("name")
         email = request.form.get("email")
         isadmin = request.form.get("isAdmin")
@@ -94,9 +96,11 @@ class RegisterView(MethodView):
 
 class AdminView(MethodView):
     def get(self):
+        """ Landing page view """
         return render_template("admin.html", year=datetime.now().year)
 
     def post(self):
+        """ Admin only login page """
         email = request.form.get("email")
         password = request.form.get("password")
         user = User.query.filter_by(email=email, admin=True).first()
@@ -150,9 +154,11 @@ class ShowStudentView(MethodView):
 
 class AddBookView(MethodView):
     def get(self):
+        """ Add book landing page """
         return render_template("add_book.html", year=datetime.now().year)
 
     def post(self):
+        """ Adding a new book page """
         name = request.form.get("name")
         author = request.form.get("author")
         description = request.form.get("description")
@@ -188,6 +194,7 @@ def admin_logout():
 
 class IssueBookView(MethodView):
     def get(self):
+        """ Issue page landing page """
         books = Book.query.filter(Book.present_copy > 0).all()
         if books:
             return render_template(
@@ -199,6 +206,7 @@ class IssueBookView(MethodView):
         )
 
     def post(self):
+        """ Adding records to database """
         book_id = int(request.form.get("book"))
         copy = Copy.query.filter_by(
             book=book_id, issued_by=None
@@ -223,6 +231,7 @@ class IssueBookView(MethodView):
 
 
 class ReturnBookView(MethodView):
+    """ loads all data on books """
     def get(self):
         copies = db.session.query(Book.id, Book.name, Book.author, Copy.issued_by).join(Book).filter(Copy.book == Book.id).filter(Copy.issued_by == current_user.id).all()
 
@@ -235,6 +244,7 @@ class ReturnBookView(MethodView):
         return render_template(url_for("main.dashboard"))
 
     def post(self):
+        """ return books logs to database """
         book_id = int(request.form.get("book"))
         copy = Copy.query.filter_by(
             book=book_id, issued_by=current_user.id
@@ -256,6 +266,7 @@ class ReturnBookView(MethodView):
 
 class RemoveBookView(MethodView):
     def get(self):
+        """ Listing of books to remove """
         books = Book.query.filter_by(issued_copy=0).all()
         if books:
             return render_template(
@@ -268,6 +279,7 @@ class RemoveBookView(MethodView):
         )
 
     def post(self):
+        """ Removing API view """
         book_id = int(request.form.get("book"))
         book = Book.query.filter_by(id=book_id).first()
         db.session.delete(book)
