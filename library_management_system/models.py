@@ -2,7 +2,7 @@ from flask_login import UserMixin
 
 from Library_Management_System import db
 
-
+""" This model is for User - Students as well as Admin- Linked with books as fk """
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     admin = db.Column(db.Boolean, default=False)
 
 
+""" This Model is for Book - Stores the book's details and count of it - linked with copy as fk """
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True)
@@ -25,6 +26,7 @@ class Book(db.Model):
     present_copy = db.Column(db.Integer)
 
 
+""" This Model is to maintain the return/issue of the book in Book model - linked as book and copy as fk """
 class Copy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_added = db.Column(db.DateTime())
