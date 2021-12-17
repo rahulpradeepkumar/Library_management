@@ -1,12 +1,14 @@
 import os
 
+# this file will have db connections settings asnd other default modes. SQLAlchemy is used
 
 class Config:
+    """ This class defines Database URI and other basic modes"""
     DEBUG = True
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get("SECRET_KEY", os.urandom(24))
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///:memory:")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///D:\\Code Hub\\library_project\\Library-Management-System\\memory.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
