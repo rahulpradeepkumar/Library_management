@@ -15,8 +15,8 @@ db.create_all()
 if __name__ == "__main__":
     HOST = os.environ.get("SERVER_HOST", "localhost")
     try:
-        #locally our project will be served at port 5555
-        PORT = int(os.environ.get("SERVER_PORT", "5555"))
+        #locally our project will be served at port 8080
+        PORT = int(os.environ.get("SERVER_PORT", "8080"))
     except ValueError:
-        PORT = 5555
+        PORT = 8080
     application.run(HOST, PORT, threaded=True)
